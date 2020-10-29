@@ -1,3 +1,5 @@
+[![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/4916)
+
 # singularity recipes
 This is a collection of singularity recipes relating to bioinformatics softwares that I find useful. Typically they are related to genomics and immunology. 
 
