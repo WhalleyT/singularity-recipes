@@ -142,7 +142,7 @@ R -e "install.packages('gsalib', repos = 'http://cran.us.r-project.org')"
 R -e "install.packages('reshape', repos = 'http://cran.us.r-project.org')"
 R -e "install.packages('gplots', repos = 'http://cran.us.r-project.org')"
 %environment
-export APPS_ROOT=/apps
+export APPS_ROOT=/sing_tools
 export BWA_VERSION=0.7.17
 export BWA_HOME=${APPS_ROOT}/bwa/${BWA_VERSION}
 export PATH=${BWA_HOME}:${PATH}
