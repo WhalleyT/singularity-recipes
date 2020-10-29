@@ -27,7 +27,7 @@ ncurses-devel \
 graphviz
 
 
-APPS_ROOT=/apps
+APPS_ROOT=/sing_tools
 mkdir -p ${APPS_ROOT}
 
 ###############################################
