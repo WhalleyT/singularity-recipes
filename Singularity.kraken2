@@ -1,0 +1,23 @@
+Bootstrap: docker
+From: alpine:3.8
+
+%post
+    apk update
+    apk upgrade
+    apk add git make
+    apk add bash curl g++ gcc bzip2-dev libc-dev ncurses-dev xz-dev zlib-dev
+    apk add perl
+
+    cd /usr/local/bin
+    curl -fsSL "https://github.com/DerrickWood/kraken2/archive/v2.0.7-beta.tar.gz" | tar xz
+    cd kraken2-2.0.7-beta
+    ./install_kraken2.sh /usr/local/bin
+
+    wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz
+    tar -xvf minikraken2_v2_8GB_201904_UPDATE.tgz
+    mv minikraken2_v2_8GB_201904_UPDATE ~/minikraken2
+    export KRAKEN2_DB_PATH="~/minikraken2"
+
+%labels
+    Maintainer whalleyt
+    Version kraken2-v2.0.7

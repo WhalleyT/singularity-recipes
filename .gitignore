@@ -1,0 +1,8 @@
+images/
+data/
+bin/
+bin/*
+data/*
+images/*
+download_pdb.py
+

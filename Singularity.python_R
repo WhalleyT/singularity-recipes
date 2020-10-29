@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%files
+    /bin/tajima.py /opt/tajima.py
+    /bin/parse_mhc_i.py /opt/parse_mhc_i.py
+    /bin/parse_mhc_ii.py /opt/parse_mhc_ii.py
+    /bin/split_fasta.py /opt/split_fasta.py
+    /bin/translate.py /opt/translate.py    
+
+%post
+    apt-get update && apt-get -y upgrade
+    apt-get install -y procps build-essential
+    
+    /opt/conda/bin/conda install -c conda-forge r-rlang numpy biopython
+
+
+%labels
+    Maintainer whalleyt
+    Version r-python-latest

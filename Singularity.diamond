@@ -1,0 +1,35 @@
+Bootstrap: docker
+From: ubuntu:bionic
+
+%labels
+    Maintainer whalleyt@cardiff.ac.uk
+
+%files
+    #data/fastas/deg.fasta /opt/deg.fasta
+    #data/fastas/VFDB.fasta /opt/VFDB.fasta
+    #data/fastas/pdb_seqres.fasta /opt/pdb_seqres.fasta
+
+%post
+    ## Download build prerequisites
+    apt-get -y update
+    apt-get -y install wget
+    cd /opt
+    wget http://github.com/bbuchfink/diamond/releases/download/v0.9.24/diamond-linux64.tar.gz
+    tar -xzf diamond-linux64.tar.gz
+  
+    ## Cleanup
+    rm -rf /opt/diamond-linux64.tar.gz
+    apt-get -y remove wget
+    apt-get -y autoremove
+    apt-get -y clean all
+
+    ## setup dbs
+    for file in *.fasta
+    do  
+        echo "/opt/diamond makedb --in %$file -d ${file%.*}"
+        /opt/diamond makedb --in $file -d ${file%.*}
+    done
+
+
+%environment
+    PATH=$PATH:/opt

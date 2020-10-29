@@ -1,0 +1,57 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+    # Install packages then remove cache package list information
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -yq install openssh-client \
+        make \
+        curl \
+        wget \
+        apt-utils \
+        build-essential \
+        net-tools \
+        librpc-xml-perl \
+        bioperl \
+        ncbi-blast+-legacy \
+        nano \
+        libf2c2 \
+        libxmlrpc-lite-perl \
+        libextutils-makemaker-cpanfile-perl \
+        gcc 
+
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    mkdir -p /tmp/results && chmod 777 /tmp/results
+
+
+    mkdir pftools && cd pftools && wget ftp://ftp.lausanne.isb-sib.ch/pub/software/unix/pftools/pft2.3/executables/linux_x86_elf/static/pft2.3_static.tar.gz && tar xvf pft2.3_static.tar.gz && chmod 755 * && ln -s /usr/local/bin/pftools/pfscan /usr/local/bin/pfscan
+
+
+    echo '/usr/local/lib64' >>/etc/ld.so.conf
+
+    wget ftp://ftp.ncbi.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && tar xvf ncbi-blast-2.6.0+-x64-linux.tar.gz && export PATH=$PATH:/usr/local/bin/ncbi-blast-2.6.0+/bin
+
+    wget http://www.psort.org/download/libpsortb-1.0.tar.gz && tar zxvf libpsortb-1.0.tar.gz && cd libpsortb-1.0 && ./configure && make && make install && ldconfig
+
+    mkdir -p /usr/local/src/blastdb
+
+
+    wget http://www.psort.org/download/bio-tools-psort-all.3.0.6.tar.gz && tar zxvf bio-tools-psort-all.3.0.6.tar.gz
+
+
+    wget http://www.psort.org/download/docker/psortb_standalone_for_docker.tar.gz && tar xvf psortb_standalone_for_docker.tar.gz && mv psortb_standalone_for_docker/Makefile.PL ./
+
+    wget http://www.psort.org/download/docker/psortb.defaults && perl Makefile.PL && make && make install 
+
+    mv /usr/local/psortb/bin /usr/local/psortb/bin_orig && mv psortb_standalone_for_docker/bin /usr/local/psortb/ && chmod +x /usr/local/psortb/bin
+
+    #cleanup
+    /usr/local/src
+
+    rm libpsortb-1.0.tar.gz bio-tools-psort-all.3.0.6.tar.gz ncbi-blast-2.6.0+-x64-linux.tar.gz /usr/local/bin/pftools/pft2.3_static.tar.gz bio-tools-psort-all/psortb_standalone_for_docker.tar.gz 
+
+    rm -r /usr/local/src/bio-tools-psort-all/psortb_standalone_for_docker
+
+%labels
+    Maintainer whalleyt
+    Version psortb
